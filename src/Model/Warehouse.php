@@ -36,9 +36,9 @@ class Warehouse
      *
      * @return int  Number of successfully picked quantity (items). May be less than or equal than the required quantity.
      */
-    public function pickProduct(Product $product, int $quantity): int
+    public function pickProduct(ArticleNumber|string $articleNumber, int $quantity): int
     {
-        return $this->inventory->pick($product, $quantity);
+        return $this->inventory->pick($articleNumber, $quantity);
     }
 
     public function getName(): string
@@ -56,9 +56,19 @@ class Warehouse
         return $this->capacity;
     }
 
+    public function getVolume(): int
+    {
+        return $this->inventory->getVolume();
+    }
+
     public function getUtilizationPercent(): int
     {
         return (int)\floor($this->inventory->getVolume() / $this->capacity * 100);
+    }
+
+    public function isFull(): bool
+    {
+        return $this->capacity === $this->inventory->getVolume();
     }
 
     /**
@@ -68,6 +78,14 @@ class Warehouse
     public function getStockItems(): iterable
     {
         return $this->inventory->getIterator();
+    }
+
+    /**
+     * @throws UnknownProductException
+     */
+    public function getProductQuantity(ArticleNumber|string $articleNumber): int
+    {
+        return $this->inventory->getProductQuantity($articleNumber);
     }
 
     public function __toString(): string

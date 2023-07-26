@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exception\UnknownProductException;
+use App\Model\ArticleNumber;
 use App\Model\Product;
 use App\Model\StockItem;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,10 +41,10 @@ final class Inventory implements \IteratorAggregate
      *
      * @return int  Number of successfully picked quantity (items). May be less than or equal the required quantity.
      */
-    public function pick(Product $product, int $quantity): int
+    public function pick(ArticleNumber|string $articleNumber, int $quantity): int
     {
-        $pickedQuantity = \min($quantity, $this->getProductQuantity($product));
-        $stock = $this->collection->get((string)$product->getArticleNumber());
+        $pickedQuantity = \min($quantity, $this->getProductQuantity($articleNumber));
+        $stock = $this->collection->get((string)$articleNumber);
         $stock->reduce($pickedQuantity);
 
         return $pickedQuantity;
@@ -60,18 +61,18 @@ final class Inventory implements \IteratorAggregate
     /**
      * @throws UnknownProductException
      */
-    public function getProductQuantity(Product $product): int
+    public function getProductQuantity(ArticleNumber|string $articleNumber): int
     {
-        if (!$this->hasProduct($product)) {
-            throw new UnknownProductException($product);
+        if (!$this->hasProduct($articleNumber)) {
+            throw new UnknownProductException($articleNumber);
         }
 
-        return $this->collection->get((string)$product->getArticleNumber())->getQuantity();
+        return $this->collection->get((string)$articleNumber)->getQuantity();
     }
 
-    public function hasProduct(Product $product): bool
+    public function hasProduct(ArticleNumber|string $articleNumber): bool
     {
-        return $this->collection->containsKey((string)$product->getArticleNumber());
+        return $this->collection->containsKey((string)$articleNumber);
     }
 
     public function getIterator(): Traversable
