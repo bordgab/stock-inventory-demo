@@ -3,7 +3,6 @@
 namespace App\Exception;
 
 use App\Model\ArticleNumber;
-use App\Model\Product;
 
 class UnknownProductException extends RuntimeException
 {
