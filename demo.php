@@ -25,12 +25,12 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
         $container->compile();
 
-        // load fixtures
-        $fixtureLoader = $container->get(FixturesLoader::class);
-        $fixtureLoader->loadFixtures();
-
         $stockManager = $container->get(StockManager::class);
+        $fixtureLoader = $container->get(FixturesLoader::class);
 
+        // load fixtures
+        $output->writeln(\sprintf('<info>Filling up warehouses from fixtures.</info>'));
+        $fixtureLoader->loadFixtures();
         $stockManager->dumpStock($output);
 
         // storing new product
@@ -50,7 +50,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
         // picking previously stored product
         $output->writeln(\sprintf('<info>Pick product: </info>%s, <info>quantity:</info>  %d', $product, $qty-1));
-        $stockManager->pick($product, $qty-1);
+        $stockManager->pick('R04', $qty-1);
 
         $stockManager->dumpStock($output);
 
