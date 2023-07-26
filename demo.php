@@ -8,7 +8,6 @@ use App\FixturesLoader;
 use App\Model\ArticleNumber;
 use App\Model\Resistor;
 use App\StockManager;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
