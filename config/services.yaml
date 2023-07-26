@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\StockManager:
+    public: true
+
+  App\FixturesLoader:
+    public: true
+
